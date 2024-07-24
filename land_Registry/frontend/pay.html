@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script>
+
+        
+var web3;
+var address="0xf4dAB9B25fFaebFD2A14B32776C9248393Efebc9";
+ async function Connect(){
+  try {
+    await window.ethereum.enable();
+    web3 = new Web3(window.ethereum);
+    console.log("Connected to MetaMask successfully!");
+} catch (error) {
+    console.error("Error connecting to MetaMask:", error);
+}
+}
+
+if(typeof web3!=='undefine'){
+	web3= new Web3(window.web3.currentProvider);
+}
+else{
+    web3= new Web3(new Web3.Provider.HttpProvider("HTTP://127.0.0.1:7545"));
+}
+var abi=[
+	{
+		"inputs": [
+			{
+				"internalType": "int256",
+				"name": "amt",
+				"type": "int256"
+			}
+		],
+		"name": "deposite_money",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "int256",
+				"name": "amt",
+				"type": "int256"
+			}
+		],
+		"name": "withdraw",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getBalance",
+		"outputs": [
+			{
+				"internalType": "int256",
+				"name": "",
+				"type": "int256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
+ var contract = new web3.eth.Contract(abi,address);
+
+ function deposite(){
+    var inputval = document.getElementById("amount").value;
+    web3.eth.getAccounts().then(function(account){
+        return contract.methods.deposite_money(inputval).send({from: account[0]});
+    }).then(function(tmp){
+        location.replace("http://localhost:9000/link1")
+        $("#amount").val("");
+        show_balance();
+		
+    }).catch(function(tmp){
+        alert(tmp);
+    })
+ }
+
+ 
+ function show_balance(){
+    contract.methods.getBalance().call().then(function(balance){
+        $("#balance").html(balance);
+		
+    })
+ }
+    </script>
+
+    <style>
+
+        @import url('https://fonts.googleapis.com/css?family=Baloo+Bhaijaan|Ubuntu');
+        
+        *{
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: 'Ubuntu', sans-serif;
+        }
+        
+        body{
+          background: #2196F3;
+          margin: 0 10px;
+        }
+        
+        .payment{
+          background: #f8f8f8;
+          max-width: 360px;
+          margin: 80px auto;
+          height: auto;
+          padding: 35px;
+          padding-top: 70px;
+          border-radius: 5px;
+          position: relative;
+        }
+        
+        .payment h2{
+          text-align: center;
+          letter-spacing: 2px;
+          margin-bottom: 40px;
+          color: #0d3c61;
+        }
+        
+        .form .label{
+          display: block;
+          color: #555555;
+          margin-bottom: 6px;
+        }
+        
+        .input{
+          padding: 13px 0px 13px 25px;
+          width: 100%;
+          text-align: center;
+          border: 2px solid #dddddd;
+          border-radius: 5px;
+          letter-spacing: 1px;
+          word-spacing: 3px;
+          outline: none;
+          font-size: 16px;
+          color: #555555;
+        }
+        
+        .card-grp{
+          display: flex;
+          justify-content: space-between;
+        }
+        
+        .card-item{
+          width: 48%;
+        }
+        
+        .space{
+          margin-bottom: 20px;
+        }
+        
+        .icon-relative{
+          position: relative;
+        }
+        
+        .icon-relative .fas,
+        .icon-relative .far{
+          position: absolute;
+          bottom: 12px;
+          left: 15px;
+          font-size: 20px;
+          color: #555555;
+        }
+        
+        .btn{
+          margin-top: 40px;
+          background: #2196F3;
+          padding: 12px;
+          text-align: center;
+          color: #f8f8f8;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+        
+        
+        .payment-logo{
+          position: absolute;
+          top: -50px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 100px;
+          height: 100px;
+          background: #f8f8f8;
+          border-radius: 50%;
+          box-shadow: 0 0 5px rgba(0,0,0,0.2);
+          text-align: center;
+          line-height: 85px;
+        }
+        
+        .payment-logo:before{
+          content: "";
+          position: absolute;
+          top: 5px;
+          left: 5px;
+          width: 90px;
+          height: 90px;
+          background: #2196F3;
+          border-radius: 50%;
+        }
+        
+        .payment-logo p{
+          position: relative;
+          color: #f8f8f8;
+          font-family: 'Baloo Bhaijaan', cursive;
+          font-size: 58px;
+        }
+        
+        
+        @media screen and (max-width: 420px){
+          .card-grp{
+            flex-direction: column;
+          }
+          .card-item{
+            width: 100%;
+            margin-bottom: 20px;
+          }
+          .btn{
+            margin-top: 20px;
+          }
+        }
+            </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="payment">
+          <div class="payment-logo">
+            <p>p</p>
+          </div>
+          <h2>Payment Gateway</h2>
+          <div class="form">
+            <div class="card space icon-relative">
+              <label class="label">holder Name:</label>
+              <input type="text" class="input" placeholder="enter name">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="card space icon-relative">
+              <label class="label">Amount:</label>
+              <input type="text" class="input" id="amount"  placeholder="enter amount">
+              <i class="far fa-credit-card"></i>
+            </div>
+           
+            </div>
+          <div >
+        
+                <p id="balance"></p>
+           <button id="connect" onclick="Connect()"  class="btn" style="position: absolute; left: 200px; top: 326px;">Connect</button> 
+                <button class="btn" id="deposit" onclick="deposite()" >Pay Now</button>
+             
+     
+               </div>
+</body>
+</html>

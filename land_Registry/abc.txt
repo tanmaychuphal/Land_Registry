@@ -1,0 +1,194 @@
+app.get('/sub',async(req,res)=>{
+
+     const data= await model.findOne().sort({_id:-1})
+
+   res.send(`<!DOCTYPE html>
+   <html lang="en">
+   
+   <head>
+       <meta charset="UTF-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <meta http-equiv="X-UA-Compatible" content="ie=edge">
+       <title>Document</title>
+       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" crossorigin="anonymous">
+       <link rel="stylesheet" href="pdf.css" />
+       <script src="pdf.js"></script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+       <style>
+           body {
+       margin: 0;
+       font-family: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+       font-size: .8125rem;
+       font-weight: 400;
+       line-height: 1.5385;
+       color: #333;
+       text-align: left;
+       background-color: #eee
+   }
+   
+   .mt-50 {
+       margin-top: 50px
+   }
+   
+   .mb-50 {
+       margin-bottom: 50px
+   }
+   
+   .card {
+       position: relative;
+       display: -ms-flexbox;
+       display: flex;
+       -ms-flex-direction: column;
+       flex-direction: column;
+       min-width: 0;
+       word-wrap: break-word;
+       background-color: #fff;
+       background-clip: border-box;
+       border: 1px solid rgba(0, 0, 0, .125);
+       border-radius: .1875rem
+   }
+   
+   .card-img-actions {
+       position: relative
+   }
+   
+   .card-body {
+       -ms-flex: 1 1 auto;
+       flex: 1 1 auto;
+       padding: 1.25rem;
+       text-align: center
+   }
+   
+   .card-title {
+       margin-top: 10px;
+       font-size: 17px
+   }
+   
+   .invoice-color {
+       color: red !important
+   }
+   
+   .card-header {
+       padding: .9375rem 1.25rem;
+       margin-bottom: 0;
+       background-color: rgba(0, 0, 0, .02);
+       border-bottom: 1px solid rgba(0, 0, 0, .125)
+   }
+   
+   a {
+       text-decoration: none !important
+   }
+   
+   .btn-light {
+       color: #333;
+       background-color: #fafafa;
+       border-color: #ddd
+   }
+   
+   .header-elements-inline {
+       display: -ms-flexbox;
+       display: flex;
+       -ms-flex-align: center;
+       align-items: center;
+       -ms-flex-pack: justify;
+       justify-content: space-between;
+       -ms-flex-wrap: nowrap;
+       flex-wrap: nowrap
+   }
+   
+   @media (min-width: 768px) {
+       .wmin-md-400 {
+           min-width: 400px !important
+       }
+   }
+   
+   .btn-primary {
+       color: #fff;
+       background-color: #2196f3
+   }
+   
+   .btn-labeled>b {
+       position: absolute;
+       top: -1px;
+       background-color: blue;
+       display: block;
+       line-height: 1;
+       padding: .62503rem
+   }
+       </style>
+       <script>
+         window.onload = function () {
+       document.getElementById("download")
+           .addEventListener("click", () => {
+               const invoice = this.document.getElementById("invoice");
+               console.log(invoice);
+               console.log(window);
+               var opt = {
+                   margin: 1,
+                   filename: 'myfile.pdf',
+                   image: { type: 'jpeg', quality: 0.98 },
+                   html2canvas: { scale: 2 },
+                   jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+               };
+               html2pdf().from(invoice).set(opt).save();
+           })
+   }  
+       </script>
+       <link rel="stylesheet" href="font.css">
+       <link rel="stylesheet" href="style.css" />
+   </head>
+   
+   <body>
+       <div class="container d-flex justify-content-center mt-50 mb-50">
+           <div class="row">
+               <div class="col-md-12 text-right mb-3">
+                   <button class="btn btn-primary" id="download"> download pdf</button>
+               </div>
+               <div class="col-md-12">
+                   <div class="card" id="invoice">
+                       <div class="card-header bg-transparent header-elements-inline">
+                           <h6 class="card-title text-primary">Sale invoice</h6>
+                       </div>
+                       <div class="card-body">
+                          
+                           <div class="d-md-flex flex-md-wrap">
+                               <div class="mb-4 mb-md-2 text-left"> <span class="text-muted">Invoice To:</span>
+                                   <ul class="list list-unstyled mb-0">
+                                       <li>
+                                           <h5 class="my-2">Land Registry Data</h5>
+                                       </li>
+                                      
+                                       <li>Name:${data.name}</li>
+                                       <li>State:${data.state}</li>
+                                       <li>City:${data.city}</li>
+                                       <li>PropertyId:${data.propertyid}</li>
+                                       <li>Owners Address:${data.owneraddress}</li>
+                                       <li>Adhar NO: ${data.adharNo}</li>
+                                       <li>Email: ${data.email}</li>
+                                       <li> Contact NO: ${data.phone}</li>
+                                      
+                                       <input id="input" type="text" placeholder="Text or Url"value= "${data}">
+                                      <li> <button onclick="generateQrCode()" id="generateBtn">Generate</button></li>
+                                       <div class="qrbox">
+                                         <img id="img" src="demo.png" >
+                                       </div>
+                                       <script src="script.js"></script>
+                                       <li><a href="#" data-abc="true">click</a></li>
+                                   </ul>
+                               </div>
+                              
+                           </div>
+                       </div>
+                                  
+                               </div>
+                           </div>
+                       </div>
+                     
+                   </div>
+               </div>
+           </div>
+       </div>
+   </body>
+   
+   </html>`)
+ })
